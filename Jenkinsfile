@@ -62,7 +62,7 @@ pipeline
             steps {
               bat 'docker build -t rohitkktr/helloo .'    
 		    bat 'docker run -d --rm -p 8880:8080 rohitkktr/helloo'
-		    bat 'docker push rohitkktr/helloo'
+		    
             }
         }
 		
