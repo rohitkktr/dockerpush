@@ -5,4 +5,4 @@ MAINTAINER rohit "rohitkktr@gmail.com">
 RUN apt-get update
 
 
-COPY target/HelloWorld.war /usr/local/tomcat/webapps/
+COPY target/*.war /usr/local/tomcat/webapps/
