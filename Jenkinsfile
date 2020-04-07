@@ -58,10 +58,18 @@ pipeline
                 )
             }
         }
+	stage ('docker') {
+            steps {
+              bat 'docker build .'    
+		    bat 'docker run -d -p 8880:8080 rohitkktr/tomcat:1'
+            }
+        }
+		
+		
 		stage('Deploy'){
 			steps{
         deploy adapters: [tomcat8(credentialsId: '88e5e28d-5e07-4250-8d07-9ac404b7e9b3', path: '', url: 'http://localhost:8813')], contextPath: null, onFailure: false, war: '**/*.war'
 			}
-		}	
+		}	u
 	}
 }
