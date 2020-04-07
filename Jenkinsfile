@@ -61,7 +61,7 @@ pipeline
 	stage ('docker') {
             steps {
               bat 'docker build .'    
-		    bat 'docker docker run -d --rm -p 8880:8080 rohitkktr/helloo'
+		    bat 'docker run -d --rm -p 8880:8080 rohitkktr/helloo'
             }
         }
 		
