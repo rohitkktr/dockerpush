@@ -66,7 +66,7 @@ pipeline
  
                     {
  
-                        dockerImage.push()
+                       bat "docker push $registry:$BUILD_NUMBER"
  
                       
  
