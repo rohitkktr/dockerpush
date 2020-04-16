@@ -1,76 +1,122 @@
 pipeline
+ 
 {
-	agent any
-	stages
-	{
-		stage('compile stage')
-		{
-			steps
-			{
-				bat 'mvn clean compile'
-			}
-		}
-
-		
-
-
-		stage('testing stage')
-		{
-			steps
-			{
-				bat 'mvn test'
-			}
-		}
-	
-		stage('package stage')
-		{
-			steps
-			{
-				bat 'mvn package'
-			}
-		}
-		
-		stage ('Artifactory configuration') {
-            steps {
-                 rtMavenDeployer (
-                    id: "MAVEN_DEPLOYER",
-                    serverId: "Artifactory",
-                    releaseRepo: "jenkins",
-                    snapshotRepo: "jenkins"
-                )
+ 
+    environment 
+ 
+    {
+ 
+        registry = 'rohitkkrt/tomcat2'
+ 
+        registryCredential = 'dockerkey'
+ 
+        dockerImage = ''
+ 
+    }
+ 
+    
+ 
+    agent any
+ 
+    
+ 
+    stages
+ 
+    {        
+ 
+        
+ 
+        stage('docker build') 
+ 
+        {
+ 
+            steps
+ 
+            {
+ 
+                script 
+ 
+                {
+ 
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+ 
+                }
+ 
             }
+ 
         }
+ 
 
-        stage ('Artifactory Exec Maven') {
-            steps {
-                 rtMavenRun (
-                    tool: "Maven3", // Tool name from Jenkins configuration
-                    pom: 'pom.xml',
-                    goals: 'clean package',
-                    deployerId: "MAVEN_DEPLOYER",
-                )
+ 
+        
+ 
+        stage('docker push') 
+ 
+        {
+ 
+            steps
+ 
+            {
+ 
+                script 
+ 
+                {
+ 
+                    docker.withRegistry( '', registryCredential ) 
+ 
+                    {
+ 
+                        dockerImage.push()
+ 
+                      
+ 
+                    }
+ 
+                }
+ 
             }
+ 
         }
-        stage ('Publish build info') {
-            steps {
-               rtPublishBuildInfo (
-                    serverId: "Artifactory"
-                )
+   stage('run') 
+ 
+        {
+ 
+            steps
+ 
+            {
+ 
+                bat "docker run -d --rm -p 8899:8080 --name test $registry:$BUILD_NUMBER"
+ 
             }
+ 
         }
-	stage ('docker') {
-            steps {
-              bat 'docker build -t rohitkktr/helloo .'    
-		    bat 'docker run -d --rm -p 8880:8080 rohitkktr/helloo'
-		    
-            }
-        }
+        
+ 
+        stage('docker remove image') 
+ 
+        {
+		input{message "image remove" ok "stop cantainer"}
 		
-		
-		stage('Deploy'){
-			steps{
-        deploy adapters: [tomcat8(credentialsId: '88e5e28d-5e07-4250-8d07-9ac404b7e9b3', path: '', url: 'http://localhost:8813')], contextPath: null, onFailure: false, war: '**/*.war'
-			}
-		}	
-	}
+ 
+            steps
+ 
+            {
+		    bat "docker stop test"
+ 
+                bat "docker rmi $registry:$BUILD_NUMBER"
+ 
+            }
+ 
+        }
+ 
+        
+ 
+        
+ 
+        
+ 
+    
+ 
+    }
+ 
 }
