@@ -1,7 +1,9 @@
 pipeline
  
 {
- 
+	// add build no use $BUILD_NUMBER
+	//to use replace latest by $BUILD_NUMBER
+
     environment 
  
     {
@@ -38,7 +40,7 @@ pipeline
  
                 {
  
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    dockerImage = docker.build registry + ":latest"
  
                 }
  
@@ -66,7 +68,7 @@ pipeline
  
                     {
  
-                       bat "docker push rohitkktr/tomcat2:$BUILD_NUMBER"
+                       bat "docker push rohitkktr/tomcat2:latest"
  
                       
  
@@ -85,7 +87,7 @@ pipeline
  
             {
  
-                bat "docker run -d --rm -p 8899:8080 --name test $registry:$BUILD_NUMBER"
+                bat "docker run -d --rm -p 8899:8080 --name test $registry:latest"
  
             }
  
@@ -107,7 +109,7 @@ pipeline
             {
 		    bat "docker stop test"
  
-                bat "docker rmi rohitkktr/tomcat2:$BUILD_NUMBER"
+                bat "docker rmi rohitkktr/tomcat2:latest"
  
             }
  
