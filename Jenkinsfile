@@ -6,7 +6,7 @@ pipeline
  
     {
  
-        registry = 'rohitkkrt/tomcat2'
+        registry = 'rohitkktr/tomcat2'
  
         registryCredential = 'dockerkey'
  
