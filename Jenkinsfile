@@ -66,7 +66,7 @@ pipeline
  
                     {
  
-                       bat "docker push rohitkktr/tomcat:1"
+                       bat "docker push rohitkktr/tomcat2:$BUILD_NUMBER"
  
                       
  
