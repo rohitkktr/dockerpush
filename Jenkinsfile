@@ -95,7 +95,11 @@ pipeline
         stage('docker remove image') 
  
         {
-		input{message "image remove" ok "stop cantainer"}
+		input
+		{
+			message "image remove" 
+			ok "stop cantainer"
+		}
 		
  
             steps
