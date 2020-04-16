@@ -107,7 +107,7 @@ pipeline
             {
 		    bat "docker stop test"
  
-                bat "docker rmi $registry:$BUILD_NUMBER"
+                bat "docker rmi rohitkktr/tomcat2:$BUILD_NUMBER"
  
             }
  
